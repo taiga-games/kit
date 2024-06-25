@@ -1,0 +1,26 @@
+{
+  "name": "games.taiga.kit",
+  "author": "Taiga Games",
+  "displayName": "TaigaGames.Kit",
+  "description": "TaigaGames.Kit is a collection of tools and utilities for Unity3D game development: ECS, Localization, UI, Utils, Extensions, etc.",
+  "unity": "2018.4",
+  "version": "1.0.0",
+  "keywords": [
+    "ECS",
+    "Entity",
+    "Component",
+    "System",
+    "Localization",
+    "UI",
+    "Utils",
+    "Conversion",
+    "Injection",
+    "Extensions",
+    "Zenject"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taiga-games/kit.git"
+  }
+}
