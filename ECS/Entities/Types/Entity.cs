@@ -110,7 +110,9 @@ namespace TaigaGames.Kit.ECS
 
         public void Clone(IEntity toEntity)
         {
+            var entityId = toEntity.GetId();
             _ecsWorld.CopyEntity(EcsEntityId, toEntity.GetEcsEntityId());
+            toEntity.GetRef<EntityId>().Value = entityId;
         }
 
         public bool TryGetName(out string name)

@@ -26,7 +26,7 @@ namespace TaigaGames.Kit.ECS
                 throw new Exception("For ECS-world injection required the ECS World");
 
             Inject(target, world, typeof(EcsWorld));
-            InjectEcs(target, world);
+            InjectPools(target, world);
             InjectQueries(target, world);
         }
 

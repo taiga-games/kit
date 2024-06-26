@@ -45,9 +45,9 @@ namespace TaigaGames
             container.BindInstance(prefab).AsSingle().NonLazy();
         }
         
-        public static void BindEcsFeature<T>(this DiContainer container) where T : IEcsFeature, new()
+        public static void BindEcsFeature<T>(this DiContainer container) where T : IEcsFeatureRegistrator
         {
-            container.Resolve<EcsRunnerForZenject>().AddFeature<T>();
+            container.BindInterfacesAndSelfTo<T>().AsSingle().NonLazy();
         }
         
         public static void BindScreen<TScreenView, TScreenController>(this DiContainer container, TScreenView prefab)
