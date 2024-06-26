@@ -9,5 +9,10 @@ namespace TaigaGames.Kit
             attribute = (T)type.GetCustomAttributes(typeof(T), true).FirstOrDefault();
             return attribute != null;
         }
+        
+        public static bool Is<T>(this System.Type type)
+        {
+            return typeof(T).IsAssignableFrom(type);
+        }
     }
 }

@@ -3,7 +3,7 @@ using System;
 namespace TaigaGames.Kit.ECS
 {
     [Serializable]
-    public readonly struct Entity : IEntity
+    public struct Entity : IEntity
     {
         public readonly uint Id;
         [NonSerialized] public readonly int EcsEntityId;
@@ -17,7 +17,14 @@ namespace TaigaGames.Kit.ECS
             EcsEntityId = ecsEntityId;
             _ecsWorld = ecsWorld;
             _entityRegistry = entityRegistry;
+            OnComponentAdded = null;
+            OnComponentChanged = null;
+            OnComponentRemoved = null;
         }
+
+        public event EntityComponentAdded OnComponentAdded;
+        public event EntityComponentChanged OnComponentChanged;
+        public event EntityComponentRemoved OnComponentRemoved;
 
         public uint GetId()
         {
@@ -29,21 +36,48 @@ namespace TaigaGames.Kit.ECS
             return EcsEntityId;
         }
 
-        public ref T Add<T>() where T : struct
+        public void Set<T>(T component) where T : struct
         {
-            return ref _ecsWorld.GetPool<T>().Add(EcsEntityId);
+            if (_ecsWorld.GetPool<T>().Has(EcsEntityId))
+            {
+                _ecsWorld.GetPool<T>().Get(EcsEntityId) = component;
+                OnComponentChanged?.Invoke(this, typeof(T));
+            }
+            else
+            {
+                _ecsWorld.GetPool<T>().Add(EcsEntityId) = component;
+                OnComponentAdded?.Invoke(this, typeof(T));
+            }
         }
 
-        public ref T Get<T>() where T : struct
+        public void Set(Type componentType, object component)
+        {
+            var pool = _ecsWorld.GetPoolByType(componentType);
+            if (pool.Has(EcsEntityId))
+            {
+                pool.SetRaw(EcsEntityId, component);
+                OnComponentChanged?.Invoke(this, componentType);
+            }
+            else
+            {
+                pool.AddRaw(EcsEntityId, component);
+                OnComponentAdded?.Invoke(this, componentType);
+            }
+        }
+
+        public T Get<T>() where T : struct
+        {
+            return _ecsWorld.GetPool<T>().Get(EcsEntityId);
+        }
+
+        public ref T GetRef<T>() where T : struct
         {
             return ref _ecsWorld.GetPool<T>().Get(EcsEntityId);
         }
 
-        public ref T GetOrAdd<T>() where T : struct
+        public object Get(Type componentType)
         {
-            if (Has<T>())
-                return ref Get<T>();
-            return ref Add<T>();
+            return _ecsWorld.GetPoolByType(componentType).GetRaw(EcsEntityId);
         }
 
         public bool Has<T>() where T : struct
@@ -51,9 +85,21 @@ namespace TaigaGames.Kit.ECS
             return _ecsWorld.GetPool<T>().Has(EcsEntityId);
         }
 
+        public bool Has(Type componentType)
+        {
+            return _ecsWorld.GetPoolByType(componentType).Has(EcsEntityId);
+        }
+
         public void Del<T>() where T : struct
         {
             _ecsWorld.GetPool<T>().Del(EcsEntityId);
+            OnComponentRemoved?.Invoke(this, typeof(T));
+        }
+
+        public void Del(Type componentType)
+        {
+            _ecsWorld.GetPoolByType(componentType).Del(EcsEntityId);
+            OnComponentRemoved?.Invoke(this, componentType);
         }
 
         public void Destroy()
@@ -62,6 +108,42 @@ namespace TaigaGames.Kit.ECS
             _ecsWorld.DelEntity(EcsEntityId);
         }
 
+        public void Clone(IEntity toEntity)
+        {
+            _ecsWorld.CopyEntity(EcsEntityId, toEntity.GetEcsEntityId());
+        }
+
+        public bool TryGetName(out string name)
+        {
+            if (!Has<EntityName>())
+            {
+                name = null;
+                return false;
+            }
+            
+            name = Get<EntityName>().Value;
+            return true;
+        }
+
+        public string GetName()
+        {
+            return TryGetName(out var name) ? name : $"Entity {Id}";
+        }
+
+        public void SetName(string name)
+        {
+            Set(new EntityName { Value = name });
+        }
+
         public static implicit operator uint(Entity entity) => entity.Id;
+        
+        public static implicit operator int(Entity entity) => entity.EcsEntityId;
+        
+        public static implicit operator EntityId(Entity entity) => new EntityId { Value = entity.Id };
+
+        public override string ToString()
+        {
+            return GetName();
+        }
     }
 }

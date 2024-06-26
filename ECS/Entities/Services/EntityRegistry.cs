@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TaigaGames.Kit.ECS
@@ -76,6 +77,9 @@ namespace TaigaGames.Kit.ECS
                 
                 var components = Array.Empty<object>();
                 _world.GetComponents(entity.EcsEntityId, ref components);
+                
+                if (types.Any(x => x == typeof(NonSerializableEntity)))
+                    continue;
                 
                 var componentsDictionary = new Dictionary<Type, object>();
                 for (var i = 0; i < types.Length; i++)

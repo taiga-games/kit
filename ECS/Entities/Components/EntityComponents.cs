@@ -20,4 +20,30 @@ namespace TaigaGames.Kit.ECS
         /// <returns>ID from component</returns>
         public static implicit operator uint(EntityId entityId) => entityId.Value;
     }
+
+    /// <summary>
+    /// Component that represents an entity name.
+    /// </summary>
+    [Serializable]
+    public struct EntityName
+    {
+        /// <summary>
+        /// The value of the entity name.
+        /// </summary>
+        public string Value;
+        
+        /// <summary>
+        /// Implicit conversion from EntityId to string.
+        /// </summary>
+        /// <param name="entityName">Component to convert.</param>
+        /// <returns>Name from component</returns>
+        public static implicit operator string(EntityName entityName) => entityName.Value;
+    }
+
+    /// <summary>
+    /// Component that represents an non-serializable entity.
+    /// </summary>
+    public struct NonSerializableEntity
+    {
+    }
 }
