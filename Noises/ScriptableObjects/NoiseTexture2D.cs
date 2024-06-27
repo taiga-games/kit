@@ -25,7 +25,12 @@ namespace TaigaGames.Noises
             
             return new BakedFlatNoise(seed, values);
         }
-        
+
+        public BakedFlatNoise BakeFlatNoise(int seed, Vector2Int size, Vector2 offset, float zoom = 1)
+        {
+            return BakeFlatNoise(seed, new int2(size.x, size.y), new float2(offset.x, offset.y), zoom);
+        }
+
         public static BakedFlatNoise BakeFlatNoise(Texture2D tex, int2 size)
         {
             if (!tex.isReadable)

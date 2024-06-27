@@ -62,6 +62,11 @@ namespace TaigaGames.Noises
             return bakedNoise;
         }
 
+        public BakedFlatNoise BakeFlatNoise(int seed, Vector2Int size, Vector2 offset, float zoom = 1)
+        {
+            return BakeFlatNoise(seed, new int2(size.x, size.y), new float2(offset.x, offset.y), zoom);
+        }
+
         public BakedVolumetricNoise BakeVolumetricNoise(int seed, int3 size, float3 offset, float zoom = 1f)
         {
             var noiseGenerator = GetFastNoiseLite(_seed + seed, zoom);
@@ -82,6 +87,11 @@ namespace TaigaGames.Noises
             
             var bakedNoise = new BakedVolumetricNoise(size, values);
             return bakedNoise;
+        }
+
+        public BakedVolumetricNoise BakeVolumetricNoise(int seed, Vector3Int size, Vector3 offset, float zoom = 1)
+        {
+            return BakeVolumetricNoise(seed, new int3(size.x, size.y, size.z), new float3(offset.x, offset.y, offset.z), zoom);
         }
 
         private FastNoiseLite GetFastNoiseLite(int seed, float zoom = 1f)

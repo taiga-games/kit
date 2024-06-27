@@ -33,5 +33,7 @@ namespace TaigaGames.Noises
         {
             _values.Dispose();
         }
+        
+        public float this[int x, int y] => GetNoise(x, y);
     }
 }
