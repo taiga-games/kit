@@ -41,9 +41,9 @@ namespace TaigaGames.Kit.ECS
     }
 
     /// <summary>
-    /// Component that represents an non-serializable entity.
+    /// Component that represents an serializable entity.
     /// </summary>
-    public struct NonSerializableEntity
+    public struct SerializableEntity
     {
     }
 }

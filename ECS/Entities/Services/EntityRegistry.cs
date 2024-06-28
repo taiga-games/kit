@@ -77,15 +77,15 @@ namespace TaigaGames.Kit.ECS
                 
                 var components = Array.Empty<object>();
                 _world.GetComponents(entity.EcsEntityId, ref components);
-                
-                if (types.Any(x => x == typeof(NonSerializableEntity)))
-                    continue;
-                
-                var componentsDictionary = new Dictionary<Type, object>();
-                for (var i = 0; i < types.Length; i++)
-                    componentsDictionary[types[i]] = components[i];
-                
-                dictionary[id] = componentsDictionary;
+
+                if (types.Any(x => x == typeof(SerializableEntity)))
+                {
+                    var componentsDictionary = new Dictionary<Type, object>();
+                    for (var i = 0; i < types.Length; i++)
+                        componentsDictionary[types[i]] = components[i];
+
+                    dictionary[id] = componentsDictionary;
+                }
             }
 
             return dictionary;
