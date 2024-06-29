@@ -34,7 +34,14 @@ namespace TaigaGames.Noises
         [Space]
         [SerializeField] private NoisePostProcessingStep[] _postProcessingSteps;
         
-        
+        public float GetNoise(int seed, float x, float y, float zoom = 1f)
+        {
+            var noiseGenerator = GetFastNoiseLite(_seed + seed, zoom);
+            var noise = noiseGenerator.GetNoise(x, y);
+            for (var i = 0; i < _postProcessingSteps.Length; i++) 
+                noise = math.clamp(_postProcessingSteps[i].Execute(noise), 0, 1);
+            return noise;
+        }
         
         public BakedFlatNoise BakeFlatNoise(int seed, int2 size, float2 offset, float zoom = 1f)
         {
