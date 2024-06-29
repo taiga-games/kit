@@ -35,7 +35,7 @@ namespace TaigaGames
             container.BindInstance(scriptableObject).AsSingle().NonLazy();
         }
         
-        public static void BindViaSpawnNewPrefab<T>(this DiContainer container, T prefab) where T : UnityEngine.MonoBehaviour
+        public static void BindViaSpawnNewPrefab<T>(this DiContainer container, T prefab) where T : UnityEngine.Behaviour
         {
             container.BindInterfacesAndSelfTo<T>().FromComponentsInNewPrefab(prefab).AsSingle().NonLazy();
         }
