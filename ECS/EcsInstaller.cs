@@ -1,6 +1,5 @@
 using TaigaGames.Kit.ECS;
 using TaigaGames.Kit.Signals;
-using UnityEngine;
 using Zenject;
 
 namespace TaigaGames.ECS
@@ -15,6 +14,8 @@ namespace TaigaGames.ECS
             Container.BindService<EntityRegistry>();
             Container.BindService<SignalBus>();
             Container.BindService<KeySignalBus<Entity>>();
+            
+            Container.BindService<EntityJsonSerialization>();
         }
     }
 }
